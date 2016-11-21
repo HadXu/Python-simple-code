@@ -121,3 +121,36 @@
     plt.show()
 
 ----------
+# 机器学习读取数据集
+
+    IMAGE_SIZE = 32
+    
+    
+    def load_images():
+    	"""
+    	Returns a tuple made of an array of 18 (types) datasets of the shape 
+    	(len(type_image), IMAGE_SIZE, IMAGE_SIZE, 3), another array that has 
+    	the labels (Pokemon type), and an array made of the name of the Pokemon
+    	"""
+    	labels = []
+    	pokemon_name = []
+    	image_index = 0
+    	# 714 because the Flying Pokemon were removed
+    	dataset = np.ndarray(shape=(714, IMAGE_SIZE, IMAGE_SIZE, 3),
+    	dtype=np.float32)
+    	# Loop through all the types directories
+    	for type in os.listdir('./Images/data'):
+    		type_images = os.listdir('./Images/data/' + type + '/')
+	    	# Loop through all the images of a type directory
+	    		for image in type_images:
+			    image_file = os.path.join(os.getcwd(), 'Images/data', type, image)
+			    pokemon_name.append(image)
+			    # reading the images as they are; no normalization, no color editing
+			    image_data = (ndimage.imread(image_file, mode='RGB'))
+			    if image_data.shape != (IMAGE_SIZE, IMAGE_SIZE, 3):
+			    raise Exception('Unexpected image shape: %s %s' % (str(image_data.shape), image_file))
+			    dataset[image_index, :, :] = image_data
+			    image_index += 1
+			    labels.append(type)
+    
+    	return (dataset, labels, pokemon_name)
