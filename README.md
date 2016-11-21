@@ -148,7 +148,7 @@
 			    # reading the images as they are; no normalization, no color editing
 			    image_data = (ndimage.imread(image_file, mode='RGB'))
 			    if image_data.shape != (IMAGE_SIZE, IMAGE_SIZE, 3):
-			    raise Exception('Unexpected image shape: %s %s' % (str(image_data.shape), image_file))
+			    	raise Exception('Unexpected image shape: %s %s' % (str(image_data.shape), image_file))
 			    dataset[image_index, :, :] = image_data
 			    image_index += 1
 			    labels.append(type)
