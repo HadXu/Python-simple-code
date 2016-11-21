@@ -142,7 +142,7 @@
     	for type in os.listdir('./Images/data'):
     		type_images = os.listdir('./Images/data/' + type + '/')
 	    	# Loop through all the images of a type directory
-	    		for image in type_images:
+	    	for image in type_images:
 			    image_file = os.path.join(os.getcwd(), 'Images/data', type, image)
 			    pokemon_name.append(image)
 			    # reading the images as they are; no normalization, no color editing
