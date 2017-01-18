@@ -154,3 +154,52 @@
 			    labels.append(type)
     
     	return (dataset, labels, pokemon_name)
+
+
+
+# Python中的多线程与多进程
+
+----------
+## 一直在搞Python的爬虫编程，在起初的时候，爬虫很小，也就看不到多进程的意义。随着爬虫的进阶，需要爬的东西越来越多，也就需要了多线程的支持。我们一步一步地来看爬虫多线程。
+
+### 爬虫初体验
+
+    import requests
+    import os
+    from urllib.request import urlretrieve
+    def download(url):
+    	filename = os.path.basename(url)
+    	urlretrieve(url,filename)
+    	print('finished download {filename}'.format(filename=filename))
+    if __name__ == '__main__':
+    	urls=["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+    		"http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+    		"http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+    		"http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]*3
+    	for url in urls:
+    			download(url)
+
+上面就是一个再简单不过的一个小爬虫，我选取的就是美国的一些文件，至于后面为什么要*3，我想大家都懂得。
+在我的机器上，运行时间是16.6s。
+
+### 第一步，看一下多线程爬虫
+
+    import requests
+    from multiprocessing import Pool
+    import os
+    from urllib.request import urlretrieve
+    from time import sleep
+    def download(url):
+    	filename = os.path.basename(url)
+    	urlretrieve(url,filename)
+    	print('finished download {filename}'.format(filename=filename))
+    if __name__ == '__main__':
+    	urls=["http://www.irs.gov/pub/irs-pdf/f1040.pdf",
+    		"http://www.irs.gov/pub/irs-pdf/f1040a.pdf",
+    		"http://www.irs.gov/pub/irs-pdf/f1040ez.pdf",
+    		"http://www.irs.gov/pub/irs-pdf/f1040sb.pdf"]*3
+    	pool = Pool(processes=6)
+    	pool.map(download,urls)
+
+这是一个简单的多线程爬虫，运行时间是6.2s，缩减时间为一半还多。线程中的6是我自己随便写的，一半为电脑核的个数加1即可。
+
