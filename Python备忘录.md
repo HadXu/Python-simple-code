@@ -163,3 +163,9 @@
 		df.to_csv('xx.csv', sep=',')
 在这里有个一注意点，那就是，如果里面有中文，如果想用excel来打开，就不要加`encoding='utf-8'`,如果不想用excel打开，用sublime来打开的话，可以加`urf-8`，当然了，可以这样用`utf-8`编码，在windows上用记事本打开，另存为设置编码为ANSI编码，这样windows也是可以看见的。不要问我怎么知道，为了对付组长的不懂因为，必须要中文，才这么干的。
 
+3. 在实习过程中，在数据库中有很多检测项，实际上通过博士的算法得到很多检测后的值，但是组长不要值，只需要知道通过或者不通过，于是可以这样写：
+
+		da = {'face': 10, 'eye': 30, 'noise': 40, 'bk': 60, 'glasses': 99}
+    	check_data = {'face': 12, 'eye': 13, 'noise': 14, 'bk': 30, 'glasses': 60}
+    	res = {k: '通过' if da.get(k) > check_data.get(k) else '不通过' for k in da.keys()}
+上面的就是标准值，下面的是得到的值，如果下面的值大于上面的值，就是不通过，可以看见Python语法太优美了。
