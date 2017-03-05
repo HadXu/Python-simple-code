@@ -143,5 +143,23 @@
 22. 翻转字典里面的key和value
 
 		inv_map = {v: k for k, v in my_map.items()}
-23. 
+----------
+##下面的是我在实习的时候碰见的问题
+1. 在Python中，都知道调用C库使用cffi，但是如果出现库之间的依赖的问题，可以这样解决：
+		
+		from ctypes import CDLL, RTLD_GLOBLE
+		from cffi import FFI
+		CDLL('***.so',mode=RTLD_GLOBLE)
+		CDLL('******.so', mode=RTLD_GLOBLE) #有多少这样的依赖，就加载进来
+		ffi = FFI()
+		ffi.cdef('各种说明，方法的定义')
+		lib = ffi.dlopen('******.so') #这里的动态链接库就是我们要使用的库
+		lib.xxxxxx() #调用库里的方法
+
+2. 在Python中，我已经得到了类似于这样的数据`data = [{'id': 123, 'name': 'hadxu'}, {'id': 345, 'name': 'qwert'}]`，要将他转换为excel,csv那样的格式，可以这样做：
+
+		import pandas as pd
+		df = pd.DataFrame(data)
+		df.to_csv('xx.csv', sep=',')
+在这里有个一注意点，那就是，如果里面有中文，如果想用excel来打开，就不要加`encoding='utf-8'`,如果不想用excel打开，用sublime来打开的话，可以加`urf-8`，当然了，可以这样用`utf-8`编码，在windows上用记事本打开，另存为设置编码为ANSI编码，这样windows也是可以看见的。不要问我怎么知道，为了对付组长的不懂因为，必须要中文，才这么干的。
 
