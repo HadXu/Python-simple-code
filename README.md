@@ -202,4 +202,29 @@
     	pool.map(download,urls)
 
 这是一个简单的多线程爬虫，运行时间是6.2s，缩减时间为一半还多。线程中的6是我自己随便写的，一半为电脑核的个数加1即可。
+下载带有打印进度条的功能:
 
+    import sys
+    import os
+    import urllib.request
+    def _print_download_progress(count, block_size, total_size):
+	    pct_complete = float(count * block_size) / total_size
+	    msg = "\r- Download progress: {0:.1%}".format(pct_complete)
+	    sys.stdout.write(msg)
+	    sys.stdout.flush()
+    def maybe_download(url, download_dir):
+	    filename = url.split('/')[-1]
+	    file_path = os.path.join(download_dir, filename)
+	    if not os.path.exists(file_path):
+	    	if not os.path.exists(download_dir):
+	    		os.makedirs(download_dir)
+	    	file_path, _ = urllib.request.urlretrieve(url=url,
+	      												filename=file_path,
+	      												reporthook=_print_download_progress)
+	    
+	    print()
+	    print("Download finished.")
+    if __name__ == '__main__': 
+	    data_url = "https://s3.amazonaws.com/cadl/models/vgg16.tfmodel"
+	    data_dir = "vgg/"
+	    maybe_download(url=data_url, download_dir=data_dir)
