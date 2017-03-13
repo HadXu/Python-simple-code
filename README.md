@@ -202,7 +202,8 @@
     	pool.map(download,urls)
 
 这是一个简单的多线程爬虫，运行时间是6.2s，缩减时间为一半还多。线程中的6是我自己随便写的，一半为电脑核的个数加1即可。
-下载带有打印进度条的功能:
+
+### 下载带有打印进度条的功能:
 
     import sys
     import os
@@ -228,3 +229,34 @@
 	    data_url = "https://s3.amazonaws.com/cadl/models/vgg16.tfmodel"
 	    data_dir = "vgg/"
 	    maybe_download(url=data_url, download_dir=data_dir)
+	    
+### 获取图像的额外信息
+在Python中，PIL库封装了大量的信息，其中包括exif信息，通过exif信息我们可以知道各种各样的信息，比如拍摄时间，拍摄系统，拍摄地点，以及其他。
+
+	def geoPic(file):
+	    img = Image.open(file)
+	    exif_date = img._getexif()
+	    ###信息参数 http://www.exiv2.org/tags.html
+	    # for k in sorted(exif_date):
+	    #     print(str(k)+'  >   '+str(exif_date[k]))
+	
+	    DataTime_ = exif_date[306]
+	    """2015:05:31 11:31:21"""
+	    data_, time_ = DataTime_.split(' ')
+	    data_ = '{}年{}月{}日'.format(*data_.split(':'))
+	    time_ = '{}时{}分{}秒'.format(*time_.split(':'))
+	    GPSInfo = exif_date[34853]
+		###这段代码是将照片中的经纬度分数形式转换成小数形式。
+	    def dms2de(dms):
+	        de = dms[0][0] / dms[0][1] \
+	             + dms[1][0] / dms[1][1] \
+	             + dms[2][0] / dms[2][1]
+	        if GPSInfo[1] in ('W', 'S'):
+	            de *= -1
+	        return de
+	
+	    try:
+	        lat, lng = dms2de(GPSInfo[2]), dms2de(GPSInfo[4])
+	        return data_, time_, lat, lng
+	    except:
+	        return None
