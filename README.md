@@ -260,3 +260,15 @@
 	        return data_, time_, lat, lng
 	    except:
 	        return None
+		
+### 函数时间计算装饰器
+    
+	    def timeit(method):
+	    def timed(*args, **kw):
+		ts = time.time()
+		result = method(*args, **kw)
+		te = time.time()
+		print(te - ts)
+		return result
+
+	    return timed
